@@ -1,0 +1,63 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("blog")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+---
+
+<Base title="Blog - coco">
+  <h1>Blog</h1>
+
+  {
+    posts.length > 0 ? (
+      <ul class="post-list">
+        {posts.map((post) => (
+          <li>
+            <time datetime={post.data.date.toISOString()}>
+              {post.data.date.toLocaleDateString("ja-JP")}
+            </time>
+            <div>
+              <a href={`${import.meta.env.BASE_URL}blog/${post.id}/`}>
+                {post.data.title}
+              </a>
+              {post.data.description && (
+                <p class="description">{post.data.description}</p>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p>まだ投稿はありません。</p>
+    )
+  }
+</Base>
+
+<style>
+  .post-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .post-list li {
+    display: flex;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  time {
+    color: var(--color-text-light);
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+
+  .description {
+    color: var(--color-text-light);
+    font-size: 0.875rem;
+    margin: 0.25rem 0 0;
+  }
+</style>
