@@ -20,7 +20,7 @@ const posts = (await getCollection("blog")).sort(
             <time datetime={post.data.date.toISOString()}>
               {post.data.date.toLocaleDateString("ja-JP")}
             </time>
-            <a href={`${import.meta.env.BASE_URL}blog/${post.id}/`}>
+            <a href={`${import.meta.env.BASE_URL}/blog/${post.id}/`}>
               {post.data.title}
             </a>
           </li>
