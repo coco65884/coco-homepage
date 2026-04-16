@@ -10,7 +10,7 @@ const posts = (await getCollection("blog")).sort(
 <Base title="coco's homepage">
   <section class="profile">
     <img
-      src={`${import.meta.env.BASE_URL}/profile.jpg`}
+      src={`${import.meta.env.BASE_URL.replace(/\/$/, "")}/profile.jpg`}
       alt="coco"
       class="profile-img"
     />
@@ -29,7 +29,9 @@ const posts = (await getCollection("blog")).sort(
             <time datetime={post.data.date.toISOString()}>
               {post.data.date.toLocaleDateString("ja-JP")}
             </time>
-            <a href={`${import.meta.env.BASE_URL}/blog/${post.id}/`}>
+            <a
+              href={`${import.meta.env.BASE_URL.replace(/\/$/, "")}/blog/${post.id}/`}
+            >
               {post.data.title}
             </a>
           </li>
