@@ -6,12 +6,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 const products = [
   {
     name: "Tokyo Master",
+    href: `${base}/products/tokyo-master/`,
     description: "東京都の地理を学ぶためのアプリ",
     links: [
-      {
-        label: "詳細",
-        href: `${base}/products/tokyo-master/`,
-      },
       {
         label: "Privacy Policy",
         href: `${base}/products/tokyo-master/privacy-policy/`,
@@ -28,7 +25,9 @@ const products = [
     {
       products.map((product) => (
         <li class="product-card">
-          <h2>{product.name}</h2>
+          <h2>
+            <a href={product.href}>{product.name}</a>
+          </h2>
           <p>{product.description}</p>
           <div class="product-links">
             {product.links.map((link) => (
