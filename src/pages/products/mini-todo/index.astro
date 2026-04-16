@@ -1,0 +1,147 @@
+---
+import Base from "../../../layouts/Base.astro";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const imgPath = `${base}/products/mini-todo`;
+
+const features = [
+  {
+    title: "Todo",
+    description:
+      "「前日以前の残タスク」と「今日のタスク」を2セクションで表示。パネルを開くと入力欄にフォーカス済みで、思いついた瞬間に Cmd+Enter で登録できます。",
+    image: `${imgPath}/todo.png`,
+    alt: "Todo画面",
+  },
+  {
+    title: "Memo",
+    description:
+      "改行可能な複数行メモを蓄積・編集。Tabキーで Todo と Memo を瞬時に切り替え。メモをクリックすれば入力欄に戻して再編集できます。",
+    image: `${imgPath}/memo.png`,
+    alt: "Memo画面",
+  },
+];
+---
+
+<Base
+  title="Mini Todo - coco"
+  description="macOS用の軽量Todoリスト&メモアプリ Mini Todo の紹介ページ"
+>
+  <section class="hero">
+    <img src={`${imgPath}/todo.png`} alt="Mini Todo パネル" class="hero-img" />
+    <div class="hero-text">
+      <h1>Mini Todo</h1>
+      <p class="tagline">macOS用の軽量Todoリスト&メモアプリ</p>
+      <p>
+        Mini Todo は、グローバルホットキー (デフォルト: Ctrl+Opt+T)
+        で瞬時に呼び出せるフローティングパネル型のTodo/メモアプリです。作業を中断せずに思いついたタスクやメモを記録し、またすぐに画面から消せる軽快さを重視しています。
+      </p>
+    </div>
+  </section>
+
+  <h2>主な機能</h2>
+  <ul class="feature-list">
+    {
+      features.map((feature) => (
+        <li class="feature-card">
+          <img src={feature.image} alt={feature.alt} class="feature-img" />
+          <div>
+            <h3>{feature.title}</h3>
+            <p>{feature.description}</p>
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+
+  <h2>ホットキー &amp; 設定</h2>
+  <ul>
+    <li>
+      修飾キー (Ctrl / Opt / Shift / Cmd) とキー (A-Z)
+      を自由に組み合わせて設定可能
+    </li>
+    <li>パネル右上の歯車アイコン、またはメニューバーから設定を開けます</li>
+    <li>Todo・メモのデータは端末内にJSON形式で保存され、外部送信されません</li>
+  </ul>
+
+  <h2>動作環境</h2>
+  <ul>
+    <li>macOS 14.0 (Sonoma) 以降</li>
+    <li>Xcode Command Line Tools または Xcode</li>
+  </ul>
+
+  <h2>関連リンク</h2>
+  <ul>
+    <li>
+      <a href="https://github.com/coco65884/mini-todo">GitHub リポジトリ</a>
+    </li>
+  </ul>
+</Base>
+
+<style>
+  .hero {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-img {
+    width: 220px;
+    max-width: 45%;
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+  }
+
+  .hero-text {
+    flex: 1;
+    min-width: 240px;
+  }
+
+  .hero-text h1 {
+    margin-bottom: 0.25rem;
+  }
+
+  .tagline {
+    color: var(--color-text-light);
+    margin-bottom: 0.75rem;
+  }
+
+  .feature-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .feature-card {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .feature-img {
+    width: 200px;
+    max-width: 45%;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+  }
+
+  .feature-card h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.1rem;
+  }
+
+  .feature-card p {
+    margin: 0;
+  }
+
+  .feature-card > div {
+    flex: 1;
+    min-width: 200px;
+  }
+</style>
