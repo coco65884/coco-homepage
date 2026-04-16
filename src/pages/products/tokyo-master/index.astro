@@ -1,0 +1,158 @@
+---
+import Base from "../../../layouts/Base.astro";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const imgPath = `${base}/products/tokyo-master`;
+
+const features = [
+  {
+    title: "地理確認",
+    description:
+      "東京都全域の地図を自由に探索。市・区ごとの駅や名所、鉄道路線、白地図などをレイヤー切り替えで確認できます。",
+    image: `${imgPath}/TM_2.PNG`,
+    alt: "地理確認画面",
+  },
+  {
+    title: "路線確認",
+    description:
+      "JR・東京メトロ・都営地下鉄など、都内を走る主要路線を地図上で確認。路線ごとの駅の並びを視覚的に学べます。",
+    image: `${imgPath}/TM_3.PNG`,
+    alt: "路線確認画面",
+  },
+  {
+    title: "選択式クイズ",
+    description:
+      "選択肢から答えを選ぶ形式のクイズで、気軽に腕試し。路線の駅順や地名を楽しく覚えられます。",
+    image: `${imgPath}/TM_4.PNG`,
+    alt: "選択式クイズ画面",
+  },
+  {
+    title: "入力式クイズ",
+    description:
+      "駅名を自分で入力する上級モード。すべての駅を暗記しているか、本格的に実力をチェックできます。",
+    image: `${imgPath}/TM_5.PNG`,
+    alt: "入力式クイズ画面",
+  },
+  {
+    title: "Achievement",
+    description:
+      "路線マスター・区マスターなど150種類以上のアチーブメントを収集。学習の進捗が一目でわかり、コンプリートを目指せます。",
+    image: `${imgPath}/TM_6.PNG`,
+    alt: "Achievement画面",
+  },
+];
+---
+
+<Base
+  title="Tokyo Master - coco"
+  description="東京の地理を楽しく学べるiOSアプリ Tokyo Master の紹介ページ"
+>
+  <section class="hero">
+    <img
+      src={`${imgPath}/TM_1.PNG`}
+      alt="Tokyo Master ホーム画面"
+      class="hero-img"
+    />
+    <div class="hero-text">
+      <h1>Tokyo Master</h1>
+      <p class="tagline">東京の地理をマスターしよう</p>
+      <p>
+        Tokyo Master
+        は、東京都の駅や路線、地理を楽しく学べるiOSアプリです。地図を自由に眺めたり、クイズで腕試ししたり、アチーブメントを集めたりしながら、気づけば都内の地理に詳しくなれます。
+      </p>
+    </div>
+  </section>
+
+  <h2>主な機能</h2>
+  <ul class="feature-list">
+    {
+      features.map((feature) => (
+        <li class="feature-card">
+          <img src={feature.image} alt={feature.alt} class="feature-img" />
+          <div>
+            <h3>{feature.title}</h3>
+            <p>{feature.description}</p>
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+
+  <h2>関連リンク</h2>
+  <ul>
+    <li>
+      <a href={`${base}/products/tokyo-master/privacy-policy/`}
+        >プライバシーポリシー</a
+      >
+    </li>
+  </ul>
+</Base>
+
+<style>
+  .hero {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-img {
+    width: 180px;
+    max-width: 40%;
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+  }
+
+  .hero-text {
+    flex: 1;
+    min-width: 240px;
+  }
+
+  .hero-text h1 {
+    margin-bottom: 0.25rem;
+  }
+
+  .tagline {
+    color: var(--color-text-light);
+    margin-bottom: 0.75rem;
+  }
+
+  .feature-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .feature-card {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .feature-img {
+    width: 160px;
+    max-width: 40%;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+  }
+
+  .feature-card h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.1rem;
+  }
+
+  .feature-card p {
+    margin: 0;
+  }
+
+  .feature-card > div {
+    flex: 1;
+    min-width: 200px;
+  }
+</style>
