@@ -1,0 +1,167 @@
+---
+import Base from "../../../layouts/Base.astro";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const imgPath = `${base}/products/closway`;
+
+const features = [
+  {
+    title: "写真から自動入力",
+    description:
+      "服を 1 枚撮るか選ぶだけで、AI (Google Gemini) がジャンル・系統・フォーマル度・色情報・質感を自動抽出。手作業のラベル付けが不要なので、撮影と保存だけでクローゼットカードが作れます。",
+  },
+  {
+    title: "背景透過マスク",
+    description:
+      "端末内 AI (Transformers.js) が服領域を自動でセグメント。背景を透過した PNG を生成して、コーディネート提案やシェア時に綺麗に並べられます。",
+  },
+  {
+    title: "一括追加",
+    description:
+      "複数枚の写真を一度に取り込み、AI 抽出を順次実行。後から個別にカード詳細を開いて属性を微調整できます。",
+  },
+  {
+    title: "コーディネート提案",
+    description:
+      "登録した服の中から AI が当日気温に合わせたコーディネートを 3 案提案。気に入ったものは保存して何度でも見返せます。",
+  },
+  {
+    title: "ルックブック",
+    description:
+      "全身写真の上にアイテムを吹き出しで配置するルックブック形式の保存も可能。1 タップで PNG 書き出しして iOS の標準 Share Sheet で共有できます。",
+  },
+  {
+    title: "クローゼット一覧",
+    description:
+      "ジャンル・系統・フォーマル度・色でフィルタしながら、所有している服を俯瞰。手放した服は別タブにアーカイブできます。",
+  },
+];
+---
+
+<Base
+  title="Closway - coco"
+  description="iOS 向け服管理アプリ Closway の紹介ページ"
+>
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Closway</h1>
+      <p class="tagline">服を撮るだけでクローゼット管理</p>
+      <p>
+        Closway は、所有している服を写真でアプリに登録し、AI で属性
+        (ジャンル・系統・色・素材感) を自動入力できる iOS
+        向けクローゼット管理アプリです。撮影と保存だけでカードが作れるので、
+        手作業のラベル付けが要りません。当日気温に合わせたコーディネート提案や、ルックブック形式の
+        保存・共有もサポートしています。
+      </p>
+      <p class="meta">
+        対応 OS: iOS 14 以降 / 言語: 日本語 ・ 英語 / 価格: 無料
+      </p>
+    </div>
+  </section>
+
+  <h2>主な機能</h2>
+  <ul class="feature-list">
+    {
+      features.map((feature) => (
+        <li class="feature-card">
+          <div>
+            <h3>{feature.title}</h3>
+            <p>{feature.description}</p>
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+
+  <h2>プライバシー</h2>
+  <ul class="privacy-summary">
+    <li>
+      写真と属性データは原則すべて<strong>端末内</strong>に保存。広告 SDK・解析
+      SDK は組込んでいません。
+    </li>
+    <li>
+      AI 属性抽出時のみ、対象画像を当方の Cloudflare Workers 経由で Google
+      Gemini に転送します。Workers は画像を保存しません (一時メモリ上のみ)。
+    </li>
+    <li>
+      アカウント作成不要。アプリをアンインストールするとすべてのデータが削除されます。
+    </li>
+  </ul>
+
+  <h2>関連リンク</h2>
+  <ul>
+    <li>
+      <a href={`${base}/products/closway/privacy-policy/`}
+        >プライバシーポリシー</a
+      >
+    </li>
+    <li>
+      <a href={`${base}/products/closway/terms/`}>利用規約</a>
+    </li>
+    <li>
+      <a href={`${base}/products/closway/support/`}>サポート</a>
+    </li>
+    <li>
+      <a href="https://github.com/coco65884/my-closet">GitHub リポジトリ</a>
+    </li>
+  </ul>
+</Base>
+
+<style>
+  .hero {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-text {
+    flex: 1;
+    min-width: 240px;
+  }
+
+  .hero-text h1 {
+    margin-bottom: 0.25rem;
+  }
+
+  .tagline {
+    color: var(--color-text-light);
+    margin-bottom: 0.75rem;
+  }
+
+  .meta {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+  }
+
+  .feature-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .feature-card {
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 1.25rem;
+  }
+
+  .feature-card h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.05rem;
+  }
+
+  .feature-card p {
+    margin: 0;
+  }
+
+  .privacy-summary {
+    padding-left: 1.25rem;
+  }
+
+  .privacy-summary li {
+    margin-bottom: 0.5rem;
+  }
+</style>
