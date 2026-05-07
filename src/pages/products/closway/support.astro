@@ -1,0 +1,263 @@
+---
+import Base from "../../../layouts/Base.astro";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const WORKER_URL = "https://closway-ai.coco65884.workers.dev/contact";
+---
+
+<Base title="サポート - Closway" description="Closway の使い方とお問い合わせ">
+  <h1>サポート</h1>
+  <p>Closway をご利用いただきありがとうございます。</p>
+
+  <h2>お問い合わせ</h2>
+  <p>
+    不具合報告・機能要望・質問は、以下のフォームからお送りください。1
+    日あたりの送信回数に上限があります。返信は数日かかる場合があります。
+  </p>
+
+  <form id="contact-form" class="contact-form" novalidate>
+    <label class="field">
+      <span>お名前 (任意)</span>
+      <input
+        type="text"
+        name="name"
+        autocomplete="name"
+        maxlength="100"
+        placeholder="例: yamada"
+      />
+    </label>
+    <label class="field">
+      <span>返信用メールアドレス (任意)</span>
+      <input
+        type="email"
+        name="email"
+        autocomplete="email"
+        maxlength="200"
+        placeholder="例: foo@example.com"
+      />
+      <small>無記入の場合は返信できません。</small>
+    </label>
+    <label class="field">
+      <span>お問い合わせ内容 (必須・5 文字以上)</span>
+      <textarea
+        name="message"
+        rows="6"
+        maxlength="4000"
+        required
+        minlength="5"
+        placeholder="ご報告・ご要望の内容をお書きください。"></textarea>
+    </label>
+    {/* honeypot: 通常のユーザーには見えない。bot に埋めさせて検出する。 */}
+    <label class="honeypot" aria-hidden="true">
+      Website
+      <input type="text" name="website" tabindex="-1" autocomplete="off" />
+    </label>
+    <button type="submit" id="submit-btn">送信</button>
+    <p id="form-status" class="form-status" role="status" aria-live="polite">
+    </p>
+  </form>
+
+  <h2>よくある質問</h2>
+
+  <h3>Q. データはどこに保存されますか?</h3>
+  <p>
+    すべて端末内 (アプリ専用領域)
+    に保存されます。アンインストールするとすべて消えます。詳細は
+    <a href={`${base}/products/closway/privacy-policy/`}>プライバシーポリシー</a
+    >
+    をご確認ください。
+  </p>
+
+  <h3>Q. AI 属性抽出が「失敗しました」となります</h3>
+  <p>
+    画像が極端に大きい・通信が不安定・サーバ側のレート制限 (1 端末あたり 1 日 50
+    回程度) に到達し ている、いずれかが原因として考えられます。1〜2
+    分後に再度お試しください。連続して失敗する場
+    合は上記フォームからお問い合わせください。
+  </p>
+
+  <h3>Q. AI 抽出の精度が低いです</h3>
+  <p>
+    現状は Google Gemini Flash の汎用モデルを使用しています。明確な単品ショット
+    (背景がシンプル、 全身ではなく上半身/下半身の単品)
+    のほうが精度が出ます。抽出結果は手動で修正可能です。
+  </p>
+
+  <h3>Q. 写真を別端末に移行できますか?</h3>
+  <p>
+    現バージョンでは端末をまたぐ同期機能はありません。今後 iCloud Drive
+    等を使った同期を検討中です。
+  </p>
+
+  <h3>Q. データが消えてしまいました</h3>
+  <p>
+    本アプリはローカル保存のため、誤って削除した場合の復元手段がありません。重要な画像は別途バッ
+    クアップを取っていただくことを推奨します。
+  </p>
+
+  <h2>既知の制約</h2>
+  <ul>
+    <li>iOS のみ対応 (Android 版・Web 版は未提供)</li>
+    <li>AI 属性抽出は 1 ユーザーあたり 1 日 50 回までの上限</li>
+    <li>
+      ネットワークオフラインでは AI 抽出と天気取得は使えません (登録自体は可能)
+    </li>
+  </ul>
+
+  <h2>関連リンク</h2>
+  <ul>
+    <li>
+      <a href={`${base}/products/closway/privacy-policy/`}
+        >プライバシーポリシー</a
+      >
+    </li>
+    <li>
+      <a href={`${base}/products/closway/terms/`}>利用規約</a>
+    </li>
+    <li>
+      <a href={`${base}/products/closway/`}>Closway 製品ページ</a>
+    </li>
+  </ul>
+</Base>
+
+<script is:inline define:vars={{ WORKER_URL }}>
+  const form = document.getElementById("contact-form");
+  const submitBtn = document.getElementById("submit-btn");
+  const statusEl = document.getElementById("form-status");
+
+  function setStatus(text, kind) {
+    statusEl.textContent = text;
+    statusEl.dataset.kind = kind;
+  }
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const data = new FormData(form);
+    const payload = {
+      name: String(data.get("name") ?? ""),
+      email: String(data.get("email") ?? ""),
+      message: String(data.get("message") ?? ""),
+      website: String(data.get("website") ?? ""),
+    };
+    if (payload.message.trim().length < 5) {
+      setStatus("お問い合わせ内容は 5 文字以上で入力してください。", "error");
+      return;
+    }
+    submitBtn.disabled = true;
+    setStatus("送信中…", "info");
+    try {
+      const res = await fetch(WORKER_URL, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        form.reset();
+        setStatus("送信しました。ご連絡ありがとうございます。", "success");
+      } else if (res.status === 429) {
+        setStatus(
+          "本日の送信上限に達しました。明日以降再度お試しください。",
+          "error",
+        );
+      } else {
+        const body = await res.json().catch(() => ({}));
+        const detail =
+          body && typeof body.error === "string"
+            ? body.error
+            : `HTTP ${res.status}`;
+        setStatus(
+          `送信に失敗しました (${detail})。時間を置いて再度お試しください。`,
+          "error",
+        );
+      }
+    } catch (e) {
+      setStatus(
+        `送信に失敗しました (${e instanceof Error ? e.message : "network error"})。`,
+        "error",
+      );
+    } finally {
+      submitBtn.disabled = false;
+    }
+  });
+</script>
+
+<style>
+  .contact-form {
+    display: grid;
+    gap: 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin-bottom: 2rem;
+    background-color: var(--color-bg, #fafafa);
+  }
+
+  .field {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .field > span {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .field small {
+    color: var(--color-text-light);
+    font-size: 0.8rem;
+  }
+
+  .field input,
+  .field textarea {
+    font: inherit;
+    padding: 0.5rem 0.65rem;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    background-color: white;
+  }
+
+  .field textarea {
+    resize: vertical;
+  }
+
+  .honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  #submit-btn {
+    justify-self: flex-start;
+    padding: 0.5rem 1.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background-color: #111827;
+    color: white;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  #submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .form-status {
+    font-size: 0.9rem;
+    min-height: 1.25rem;
+  }
+
+  .form-status[data-kind="success"] {
+    color: #047857;
+  }
+
+  .form-status[data-kind="error"] {
+    color: #b91c1c;
+  }
+
+  .form-status[data-kind="info"] {
+    color: var(--color-text-light);
+  }
+</style>
